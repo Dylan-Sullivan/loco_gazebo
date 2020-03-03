@@ -4,28 +4,44 @@ import rospy
 from loco_pilot.msg import Command
 from geometry_msgs.msg import Wrench
 
-cmdPub = None
+apply_left=None
+apply_vertical=None
+apply_right=None
+apply_drag=None
 
 def commands_callback(data):
-    global cmdPub
-    (yaw, throttle, _, pitch, _, _) = data.axes
-    msg = Command()
+    global apply_left
+    global apply_vertical
+    global apply_right
+    global apply_drag
 
-    msg.pitch = pitch
-    msg.yaw = yaw*-1
-    msg.throttle = throttle
+    pitch=data.pitch
+    yaw=data.yaw
+    throttle=data.throttle
 
-    cmdPub.publish(msg)
+    left=Wrench()
+    right=Wrench()
+
+    left.force.x=1.0*throttle
+    right.force.x=1.0*throttle
+
+    apply_left.publish(left)
+    apply_right.publish(right)
 
 
 def thrust_apply():
+    global apply_left
+    global apply_vertical
+    global apply_right
+    global apply_drag
+
     rospy.init_node('sim_control_node', anonymous=True)
     rate=rospy.Rate(10) # 10 Hz
 
-    apply_left=rospy.Publisher("/left_thrust",geometry_msgs/Wrench, queue_size=5)
-    apply_vertical=rospy.Publsiher("/vertical_thrust",geometry_msgs/Wrench, queue_size=5)
-    apply_right=rospy.Publisher("/right_thrust",geometry_msgs/Wrench, queue_size=5)
-    apply_drag=rospy.Publsiher("/drag_force",geometry_msgs/Wrench, queue_size=5)
+    apply_left=rospy.Publisher("/left_thrust",Wrench, queue_size=5)
+    apply_vertical=rospy.Publisher("/vertical_thrust",Wrench, queue_size=5)
+    apply_right=rospy.Publisher("/right_thrust",Wrench, queue_size=5)
+    apply_drag=rospy.Publisher("/drag_force",Wrench, queue_size=5)
 
     rospy.Subscriber("/loco/command", Command, commands_callback)
 
@@ -35,6 +51,6 @@ def thrust_apply():
 
 if __name__ == '__main__':
     try:
-        spinner()
+        thrust_apply()
     except rospy.ROSInterruptException:
         pass
