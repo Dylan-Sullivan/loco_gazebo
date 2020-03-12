@@ -30,8 +30,24 @@ def commands_callback1(data):
     throttle=data.throttle
 
     vertical_raw=max_force*pitch
-    left_raw=max_force*throttle+max_force*yaw
-    right_raw=max_force*throttle-max_force*yaw
+    if throttle==0 and yaw==0:
+        left_raw=0
+        right_raw=0
+    else:
+        if throttle>=0:
+            if yaw>=0:
+                left_raw=max_force*(throttle**2+yaw**2)**0.5
+                right_raw=max_force*throttle
+            else:
+                right_raw=max_force*(throttle**2+yaw**2)**0.5
+                left_raw=max_force*throttle
+        else:
+            if yaw>=0:
+                left_raw=-max_force*(throttle**2+yaw**2)**0.5
+                right_raw=max_force*throttle
+            else:
+                right_raw=-max_force*(throttle**2+yaw**2)**0.5
+                left_raw=max_force*throttle
 
 def commands_callback2(data):
     global apply_left
@@ -41,7 +57,17 @@ def commands_callback2(data):
 
     global maxvel
 
-    lumped_drag_param=20.578
+    Area_z=.16    # m^2, approx
+    p=1000  # water density
+    drag_coef_z=1.2 # half circle
+
+    #Area_y=0.14 # m^2, approx, cross section both cyl plus cross section betweeen tubes and thrusters
+    Area_y=0.083
+    drag_coef_y=1.2 # cyl, square tube rounded edges
+
+    drag_paramx=20.578 # from data
+    drag_paramy=drag_coef_y*Area_y*p/2 # calc
+    drag_paramz=drag_coef_z*Area_z*p/2 # calc
 
     vertical=Wrench()
     left=Wrench()
@@ -73,11 +99,10 @@ def commands_callback2(data):
     new_right=quaternion_multiply(quaternion_multiply(quat_rt,right_vec),quaternion_conjugate(quat_rt))
     new_left=quaternion_multiply(quaternion_multiply(quat_lt,left_vec),quaternion_conjugate(quat_lt))
 
+    new_dragx=quaternion_multiply(quaternion_multiply(quat_dr,[1,0,0,0]),quaternion_conjugate(quat_dr))
+    new_dragy=quaternion_multiply(quaternion_multiply(quat_dr,[0,1,0,0]),quaternion_conjugate(quat_dr))
+    new_dragz=quaternion_multiply(quaternion_multiply(quat_dr,[0,0,1,0]),quaternion_conjugate(quat_dr))
 
-    #Drag quaternion operations have yet to be completed
-    #new_dragx=quaternion_multiply(quaternion_multiply(quat_dr,[1,0,0,0]),quaternion_conjugate(quat_dr))
-    #new_dragy=quaternion_multiply(quaternion_multiply(quat_dr,[0,1,0,0]),quaternion_conjugate(quat_dr))
-    #new_dragz=quaternion_multiply(quaternion_multiply(quat_dr,[0,0,1,0]),quaternion_conjugate(quat_dr))
     vertical.force.x=new_vertical[0]
     vertical.force.y=new_vertical[1]
     vertical.force.z=new_vertical[2]
@@ -88,24 +113,37 @@ def commands_callback2(data):
     right.force.y=new_right[1]
     right.force.z=new_right[2]
 
+    vel_relx=data.twist[drindex].linear.x*new_dragx[0]+data.twist[drindex].linear.y*new_dragx[1]+data.twist[drindex].linear.z*new_dragx[2]
+    vel_rely=data.twist[drindex].linear.x*new_dragy[0]+data.twist[drindex].linear.y*new_dragy[1]+data.twist[drindex].linear.z*new_dragy[2]
+    vel_relz=data.twist[drindex].linear.x*new_dragz[0]+data.twist[drindex].linear.y*new_dragz[1]+data.twist[drindex].linear.z*new_dragz[2]
+    ang_relx=data.twist[drindex].angular.x*new_dragx[0]+data.twist[drindex].angular.y*new_dragx[1]+data.twist[drindex].angular.z*new_dragx[2]
+    ang_rely=data.twist[drindex].angular.x*new_dragy[0]+data.twist[drindex].angular.y*new_dragy[1]+data.twist[drindex].angular.z*new_dragy[2]
+    ang_relz=data.twist[drindex].angular.x*new_dragz[0]+data.twist[drindex].angular.y*new_dragz[1]+data.twist[drindex].angular.z*new_dragz[2]
 
-    drag.force.x=-lumped_drag_param*data.twist[drindex].linear.x*abs(data.twist[drindex].linear.x)
-    drag.force.y=-lumped_drag_param*data.twist[drindex].linear.y*abs(data.twist[drindex].linear.y)
-    drag.force.z=-lumped_drag_param*data.twist[drindex].linear.z*abs(data.twist[drindex].linear.z)
-    drag.torque.x=-lumped_drag_param*(.133*data.twist[drindex].angular.x*abs(data.twist[drindex].angular.x))
-    drag.torque.y=-lumped_drag_param*(.133*data.twist[drindex].angular.y*abs(data.twist[drindex].angular.y))
-    drag.torque.z=-lumped_drag_param*(.133*data.twist[drindex].angular.z*abs(data.twist[drindex].angular.z))
+    drag_relx=-drag_paramx*vel_relx*abs(vel_relx)
+    drag_rely=-drag_paramy*vel_rely*abs(vel_rely)
+    drag_relz=-drag_paramz*vel_relz*abs(vel_relz)
+    torque_relx=-drag_paramx*2*(0.577*0.344/2)**2*ang_relx*abs(ang_relx)
+    torque_rely=-drag_paramy*2*(0.577*0.731/2)**2*ang_rely*abs(ang_rely)
+    torque_relz=-drag_paramz*2*(0.577*0.731/2)**2*ang_relz*abs(ang_relz)
 
-    vel=(data.twist[drindex].linear.x**2+data.twist[drindex].linear.y**2+data.twist[drindex].linear.z**2)**0.5
-    if vel>maxvel:
-        maxvel=vel
-        print(maxvel)
+    drag.force.x=drag_relx*new_dragx[0]+drag_rely*new_dragy[0]+drag_relz*new_dragz[0]
+    drag.force.y=drag_relx*new_dragx[1]+drag_rely*new_dragy[1]+drag_relz*new_dragz[1]
+    drag.force.z=drag_relx*new_dragx[2]+drag_rely*new_dragy[2]+drag_relz*new_dragz[2]
+    drag.torque.x=torque_relx*new_dragx[0]+torque_rely*new_dragy[0]+torque_relz*new_dragz[0]
+    drag.torque.y=torque_relx*new_dragx[1]+torque_rely*new_dragy[1]+torque_relz*new_dragz[1]
+    drag.torque.z=torque_relx*new_dragx[2]+torque_rely*new_dragy[2]+torque_relz*new_dragz[2]
 
+    #print(data.twist[drindex])
+    #vel=(data.twist[drindex].linear.x**2+data.twist[drindex].linear.y**2+data.twist[drindex].linear.z**2)**0.5
+    #if vel>maxvel:
+        #maxvel=vel
+        #print(maxvel)
 
-    apply_vertical.publish(vertical)
-    apply_left.publish(left)
-    apply_right.publish(right)
     apply_drag.publish(drag)
+    apply_vertical.publish(vertical)
+    apply_right.publish(right)
+    apply_left.publish(left)
 
 
 def thrust_apply():
@@ -115,7 +153,7 @@ def thrust_apply():
     global apply_drag
 
     rospy.init_node('sim_control_node', anonymous=True)
-    rate=rospy.Rate(10) # 10 Hz
+    rate=rospy.Rate(100) # 100 Hz, latency issues with lower rates
 
     apply_left=rospy.Publisher("/left_thrust",Wrench, queue_size=1)
     apply_vertical=rospy.Publisher("/vertical_thrust",Wrench, queue_size=1)
