@@ -17,7 +17,7 @@ To install these packages, use the command `sudo apt-get install ros-melodic-ins
 - liburdfdom-tools
 - joint-state-publisher-gui
 
-## Enivironment Setup
+## Environment Setup
 
 Since development of the simulation resides in various packages and there is not a workspace available for download, a workspace must first be created. Instructions for this can be found at `http://wiki.ros.org/catkin/Tutorials/create_a_workspace`. It is recommended to name the workspace 'loco_ws' rather than 'catkin_ws' for keeping the workspace identifiable.
 
