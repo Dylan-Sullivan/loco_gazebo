@@ -78,7 +78,7 @@
           <geometry>
             <box>
               <!--<size>200 200 .1</size>-->
-              <size>22.86 12.8 .001</size>
+              <size>22.86 12.8 .01</size>
             </box>
           </geometry>
         </collision>
@@ -87,14 +87,16 @@
           <geometry>
             <box>
               <!--<size>200 200 .1</size>-->
-              <size>22.86 12.8 .001</size>
+              <size>22.86 12.8 .01</size>
             </box>
           </geometry>
           <material>
-            <script>
+            <ambient> 0 0 1 0.1 </ambient>
+            <diffuse> 0 0 1 0.1 </diffuse>
+            <!--<script>
               <uri>file://media/materials/scripts/gazebo.material</uri>
               <name>Gazebo/BlueTransparent</name>
-            </script>
+            </script>-->
           </material>
         </visual>
 
@@ -105,14 +107,12 @@
           <geometry>
             <box>
               <!--<size>0.1 200 39.9</size>-->
-              <size>0.001 12.8 2.44</size>
+              <size>0.01 12.8 2.44</size>
             </box>
           </geometry>
           <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/BlueTransparent</name>
-            </script>
+            <ambient> 0 0 1 0.1 </ambient>
+            <diffuse> 0 0 1 0.1 </diffuse>
           </material>
         </visual>
 
@@ -122,14 +122,12 @@
           <geometry>
             <box>
               <!--<size>0.1 200 39.9</size>-->
-              <size>0.001 12.8 2.44</size>
+              <size>0.01 12.8 2.44</size>
             </box>
           </geometry>
           <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/BlueTransparent</name>
-            </script>
+            <ambient> 0 0 1 0.1 </ambient>
+            <diffuse> 0 0 1 0.1 </diffuse>
           </material>
         </visual>
 
@@ -140,14 +138,12 @@
           <geometry>
             <box>
               <!--<size>200 0.1 39.9</size>-->
-              <size>22.86 0.001 2.44</size>
+              <size>22.86 0.01 2.44</size>
             </box>
           </geometry>
           <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/BlueTransparent</name>
-            </script>
+            <ambient> 0 0 1 0.1 </ambient>
+            <diffuse> 0 0 1 0.1 </diffuse>
           </material>
         </visual>
 
@@ -158,14 +154,12 @@
           <geometry>
             <box>
               <!--<size>200 0.1 39.9</size>-->
-              <size>22.86 0.001 2.44</size>
+              <size>22.86 0.01 2.44</size>
             </box>
           </geometry>
           <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/BlueTransparent</name>
-            </script>
+            <ambient> 0 0 1 0.1 </ambient>
+            <diffuse> 0 0 1 0.1 </diffuse>
           </material>
         </visual>
 
