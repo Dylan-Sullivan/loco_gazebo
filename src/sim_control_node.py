@@ -152,7 +152,7 @@ def thrust_apply():
     global apply_right
     global apply_drag
 
-    rospy.init_node('sim_control_node', anonymous=True)
+    rospy.init_node('sim_control_node', anonymous=False)
     rate=rospy.Rate(100) # 100 Hz, latency issues with lower rates
 
     apply_left=rospy.Publisher("/left_thrust",Wrench, queue_size=1)
