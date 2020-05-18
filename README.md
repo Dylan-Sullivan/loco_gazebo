@@ -30,9 +30,9 @@ The four packages required to operate the simulation are listed below. The repos
 
 Once these packages have been installed, navigate back to the 'loco_ws' folder and enter the command `catkin_make` to finish configuring the workspace.
 
-## Running the Simulation
+## Running the Interactive Simulation
 
-To begin running the simulation, first, create a terminal window (or tab) and enter the command `roscore` to initialize ROS. Open a new window and navigate to the 'loco_ws' folder and enter the command `catkin_make` to ensure the workspace is up to date, then `source devel/setup.bash` to source the setup. Any time a new terminal window or tab is created to run something from this workspace, the `source devel/setup.bash` command should be performed first.
+To begin running the interactive simulation, first, create a terminal window (or tab) and enter the command `roscore` to initialize ROS. Open a new window and navigate to the 'loco_ws' folder and enter the command `catkin_make` to ensure the workspace is up to date, then `source devel/setup.bash` to source the setup. Any time a new terminal window or tab is created to run something from this workspace, the `source devel/setup.bash` command should be performed first.
 
 ### Launch Simulation in Gazebo
 In a new tab,
@@ -56,3 +56,19 @@ For example, to launch an empty world with LoCO:
 `roslaunch loco_gazebo loco_gazebo.launch world_name:='empty_world.world'`
 
 The world files tested and included with the simulation can be found in the 'loco_gazebo' package under the 'worlds' folder.
+
+## Particle Filter Test Program
+
+There is currently a test implementation of particle filter localization based on bathymetric data. To run this test program, first, create a terminal window (or tab) and navigate to the 'loco_ws' folder and enter the command `catkin_make` to ensure the workspace is up to date, then `source devel/setup.bash` to source the setup. Any time a new terminal window or tab is created to run something from this workspace, the `source devel/setup.bash` command should be performed first.
+
+### Launch Simulation in Gazebo
+In a new tab,
+`roslaunch loco_gazebo pf_test.launch`
+### Launch Simulation Control Node
+In a new tab,
+`rosrun loco_gazebo sim_control_node.py`
+### Launch Test Program
+In a new tab,
+`rosrun loco_gazebo pf_test.py`
+
+Now, the Gazebo simulation window should show LoCO in front of a staircase, and the particle filter test is ready to run. Press play in the bottom left of the screen. The test does not stop automatically, so once LoCO completes the staircase, the pause button in the bottom left of the screen can be pressed.
