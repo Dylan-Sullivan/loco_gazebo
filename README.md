@@ -41,11 +41,13 @@ Once these packages have been installed, navigate back to the 'loco_ws' folder a
 With the launch of ROS Noetic, the appropriate compatibility changes have been made to support the use of Python 3. However, ROS Melodic defaults to using Python 2 and will not successfully run all files without a slight setup modification. This can be found at https://answers.ros.org/question/326226/importerror-dynamic-module-does-not-define-module-export-function-pyinit__tf2/, but the same instructions are given below. This must be performed in a workspace with no "build" or "devel" folder.
 
 Install some prerequisites to use Python3 with ROS
+
 `sudo apt update`
 
 `sudo apt install python3-catkin-pkg-modules python3-rospkg-modules python3-empy`
 
 Prepare catkin workspace
+
 `mkdir -p ~/catkin_ws/src; cd ~/catkin_ws` (this step is not required if using an existing workspace)
 
 `catkin_make`
@@ -61,6 +63,7 @@ Prepare catkin workspace
 `rosdep install --from-paths src --ignore-src -y -r`
 
 Finally compile for Python 3
+
 `catkin_make --cmake-args \
             -DCMAKE_BUILD_TYPE=Release \
             -DPYTHON_EXECUTABLE=/usr/bin/python3 \
