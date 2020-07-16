@@ -4,9 +4,9 @@ This package allows for simulation of LoCO using Gazebo.
 
 ## System Setup(s) Verified
 
-- ROS: Melodic
+- ROS: Melodic, Noetic
 - Gazebo: 9.12.0-1~bionic
-- Python: 2.7
+- Python: 2.7, 3
 
 ## Package Downloads
 
@@ -35,6 +35,30 @@ The four packages required to operate the simulation are listed below. The repos
 - loco_teleop: `https://github.umn.edu/loco-auv/loco_teleop`
 
 Once these packages have been installed, navigate back to the 'loco_ws' folder and enter the command `catkin_make` to finish configuring the workspace.
+
+### If Using ROS Melodic
+
+With the launch of ROS Noetic, the appropriate compatibility changes have been made to support the use of Python 3. However, ROS Melodic defaults to using Python 2 and will not successfully run all files without a slight setup modification. This can be found at https://answers.ros.org/question/326226/importerror-dynamic-module-does-not-define-module-export-function-pyinit__tf2/, but the same instructions are given below. This must be performed in a workspace with no "build" or "devel" folder.
+
+Install some prerequisites to use Python3 with ROS
+`sudo apt update`
+`sudo apt install python3-catkin-pkg-modules python3-rospkg-modules python3-empy`
+
+Prepare catkin workspace
+`mkdir -p ~/catkin_ws/src; cd ~/catkin_ws` (this step is not required if using an existing workspace)
+`catkin_make`
+`source devel/setup.bash`
+`wstool init`
+`wstool set -y src/geometry2 --git https://github.com/ros/geometry2 -v 0.6.5`
+`wstool up`
+`rosdep install --from-paths src --ignore-src -y -r`
+
+Finally compile for Python 3
+`catkin_make --cmake-args \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+            -DPYTHON_INCLUDE_DIR=/usr/include/python3.6m \
+            -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.6m.so`
 
 ## Running the Interactive Simulation
 
