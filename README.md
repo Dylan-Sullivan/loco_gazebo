@@ -10,12 +10,18 @@ This package allows for simulation of LoCO using Gazebo.
 
 ## Package Downloads
 
-To install these packages, use the command `sudo apt-get install ros-melodic-insert_package_name`
+To install these packages, use the command `sudo apt install ros-ros_version-insert_package_name`. After each new package download, run the command `rospack profile`.
 
 - teleop-twist-keyboard
 - mavros
-- liburdfdom-tools
+- urdfdom-py
 - joint-state-publisher-gui
+- gazebo-ros
+- robot-state-publisher
+
+To install these packages, use the command `sudo apt install insert_package_name`. After each new package download, run the command `rospack profile`.
+
+- liburdfdom-tools
 
 ## Environment Setup
 
