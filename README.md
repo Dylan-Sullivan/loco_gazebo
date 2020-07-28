@@ -72,7 +72,7 @@ Finally compile for Python 3
 
 ## Running the Interactive Simulation
 
-To begin running the interactive simulation, first, create a terminal window (or tab) and enter the command `roscore` to initialize ROS. Open a new window and navigate to the 'loco_ws' folder and enter the command `catkin_make` to ensure the workspace is up to date, then `source devel/setup.bash` to source the setup. Any time a new terminal window or tab is created to run something from this workspace, the `source devel/setup.bash` command should be performed first.
+To begin running the interactive simulation, first, create a terminal window (or tab) and enter the command `roscore` to initialize ROS. Open a new window and navigate to the 'loco_ws' folder and enter the command `catkin_make` to ensure the workspace is up to date (if `catkin_make` has not already been performed), then `source devel/setup.bash` to source the setup. Any time a new terminal window or tab is created to run something from this workspace, the `source devel/setup.bash` command should be performed first.
 
 ### Launch Simulation in Gazebo
 In a new tab,
