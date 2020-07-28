@@ -6,7 +6,7 @@ This package allows for simulation of LoCO using Gazebo.
 
 - ROS: Melodic, Noetic
 - Gazebo: 9.12.0-1~bionic
-- Python: 2.7, 3
+- Python: 3
 
 ## Package Downloads
 
