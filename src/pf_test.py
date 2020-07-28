@@ -26,6 +26,7 @@ weights=None
 rospy_rate=1
 ax2=None
 old_time=0
+graph_initialize=True
 
 # Compute the distance from bottom each particle should read
 # based on bathymetry data
@@ -62,7 +63,7 @@ def estimate(particles, weights):
     return mean, var
 
 def simple_resample(particles, weights):
-    #print "Particles being resampled."
+    #print (Particles being resampled.)
     N = len(particles)
     cumulative_sum = np.cumsum(weights)
     indexes = np.searchsorted(cumulative_sum, np.random.random_sample((N,)))
@@ -79,6 +80,8 @@ def estimation(data):
     global est_pos
     global thruster_cmds
     global initialize
+    global graph_initialize
+    global ax2
 
     global weights
     global particles
@@ -94,8 +97,8 @@ def estimation(data):
         loco_base=link_state("robot::loco_base_frame","")
         #actual_pos=Vector3(loco_base.link_state.pose.position.x,loco_base.link_state.pose.position.y,loco_base.link_state.pose.position.z)
         actual_posx=loco_base.link_state.pose.position.x
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
+    except rospy.ServiceException as e:
+        print ("Service call failed: %s"%e)
 
     # Get time property of world
     rospy.wait_for_service('/gazebo/get_world_properties')
@@ -104,8 +107,8 @@ def estimation(data):
         time=world_props().sim_time
         dt=time-old_time
         old_time=time
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
+    except rospy.ServiceException as e:
+        print ("Service call failed: %s"%e)
 
     # Thruster command
     thrusters = Command()
@@ -143,7 +146,7 @@ def estimation(data):
 
     # Resample if necessary
     if neff(weights) < N/2:
-        #print "resampling"
+        #print (resampling)
         simple_resample(particles, weights)
 
     # Estimate position
@@ -153,18 +156,26 @@ def estimation(data):
 
     # Position Plot
     plt.figure(2)
-    ax2=plt.axes()
-    plt.title('Estimated vs Actual X Position over Time')
+
+    if graph_initialize:
+        plt.title('Estimated vs Actual X Position over Time')
+        plt.xlabel('Time (s)')
+        plt.ylabel('X Position (m)')
+        ax2=plt.axes()
+
     plt.xlim(0,20)
     plt.ylim(0,20)
-    plt.xlabel('Time (s)')
-    plt.ylabel('X Position (m)')
     ax2.plot(time,actual_posx,'bx',label='Actual Position')
     ax2.plot(time,mu,'r.',label='Estimated Position')
-    plt.legend(loc=2)
+
+    if graph_initialize:
+        plt.legend(loc=2)
+        graph_initialize=False
+
     textvar1=plt.text(0.5,16,'Estimation Mean: %f m'%mu)
     textvar2=plt.text(0.5,15,'Estimation Variance: %f m^2'%var)
     textvar3=plt.text(0.5,14,'Total RMSE: %f m'%current_rmse)
+
 
     plt.draw()
     plt.pause(0.001)
