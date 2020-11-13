@@ -88,6 +88,14 @@ Teleoperation directions are given in the terminal window and will reappear afte
 
 Press the play button in the lower left of the simulation window in Gazebo to begin the simulation. Click back onto the teleoperation terminal space and then LoCO can be operated.
 
+### Viewing Cameras
+In a new tab,
+`rqt_image_view`
+
+Choose either /left_camera/image_raw or /right_camera/image_raw from the dropdown menu. 
+
+Camera specifications follow Blue Robotics Low-Light Cameras and can be found in `/loco-auv/loco_description/urdf`  
+
 ## Loading Different Gazebo Worlds
 The default world for the LoCO simulation is a pool-like environment. To load a different world, when launching the simulation in gazebo, add the 'world_name' launch file argument to the launch command:
 `roslaunch loco_gazebo loco_gazebo.launch world_name:='insert_world_name'`
