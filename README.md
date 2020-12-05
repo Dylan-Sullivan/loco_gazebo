@@ -76,7 +76,7 @@ To begin running the interactive simulation, first, create a terminal window (or
 
 ### Launch Simulation in Gazebo
 In a new tab,
-`roslaunch loco_gazebo loco_gazebo.launch`
+`roslaunch loco_gazebo loco_general.launch`
 ### Launch Simulation Control Node
 In a new tab,
 `rosrun loco_gazebo sim_control_node.py`
@@ -98,10 +98,10 @@ Camera specifications follow Blue Robotics Low-Light Cameras and can be found in
 
 ## Loading Different Gazebo Worlds
 The default world for the LoCO simulation is a pool-like environment. To load a different world, when launching the simulation in gazebo, add the 'world_name' launch file argument to the launch command:
-`roslaunch loco_gazebo loco_gazebo.launch world_name:='insert_world_name'`
+`roslaunch loco_gazebo loco_general.launch world_name:='insert_world_name'`
 
 For example, to launch an empty world with LoCO:
-`roslaunch loco_gazebo loco_gazebo.launch world_name:='empty_world.world'`
+`roslaunch loco_gazebo loco_general.launch world_name:='empty_world.world'`
 
 The world files tested and included with the simulation can be found in the 'loco_gazebo' package under the 'worlds' folder.
 
