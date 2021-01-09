@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<sdf version="1.5">
+  <world name="default">
+    <!--Global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+  <model name="stl">
+    <pose>0 0 0 0 0 0</pose>
+    <static>true</static>
+    <link name="stl">
+      <collision name="collision1">
+        <geometry>
+          <mesh>
+            <uri>file://waverly.stl</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+
+        </geometry>
+      </collision>
+      <visual name="visual1">
+        <geometry>
+          <mesh>
+            <uri>file://waverly.stl</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient> .34 .24 .18 1 </ambient>
+          <diffuse> .68 .48 .36 1 </diffuse>
+        </material>
+      </visual>
+    </link>
+  </model>
+
+  <model name="ceiling_plane">
+    <static>true</static>
+    <pose>792.500000 1075.000000 0 0 0 0</pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>1585.000000 2150.000000 .000001</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <box>
+            <size>1585.000000 2150.000000 .000001</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient> 0 0 1 0.0 </ambient>
+          <diffuse> 0 0 1 0.0 </diffuse>
+        </material>
+      </visual>
+    </link>
+  </model>
+
+  </world>
+</sdf>
