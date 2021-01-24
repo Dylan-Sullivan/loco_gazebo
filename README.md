@@ -29,10 +29,10 @@ Since development of the simulation resides in various packages and there is not
 
 The four packages required to operate the simulation are listed below. The repositories should be cloned and located under the 'loco_ws/src/' path.
 
-- loco_description: `https://github.umn.edu/loco-auv/loco_description`
-- loco_gazebo: `https://github.umn.edu/loco-auv/loco_gazebo` (though you are already here if you are reading this)
-- loco_pilot: `https://github.umn.edu/loco-auv/loco_pilot`
-- loco_teleop: `https://github.umn.edu/loco-auv/loco_teleop`
+- loco_description: `https://github.com/LoCO-AUV/loco_description`
+- loco_gazebo: `https://github.com/LoCO-AUV/loco_gazebo` (though you are already here if you are reading this)
+- loco_pilot: `https://github.com/LoCO-AUV/loco_pilot`
+- loco_teleop: `https://github.com/LoCO-AUV/loco_teleop`
 
 Once these packages have been installed, navigate back to the 'loco_ws' folder and enter the command `catkin_make` to finish configuring the workspace.
 
